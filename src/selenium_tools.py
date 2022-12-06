@@ -2,14 +2,19 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import WebDriverException
 import time
+import os
+
+#download_directory is eval_files
+download_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files')
 
 
 def get_webdriver() -> webdriver:
+    prefs = {'download.default_directory': download_directory}
     options = webdriver.ChromeOptions()
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
+    options.add_argument("--headless")
+    options.add_argument("--disable-dev-shm-usage")
+    #options.add_argument("--no-sandbox")
+    options.add_experimental_option('prefs', prefs)
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     return driver
 
@@ -48,7 +53,7 @@ def get_chrome_driver_status(driver):
         return "Dead"
 
 def main():
-    pass
+    print(f'Download directory: {download_directory}')
 
 
 if __name__ == '__main__':
