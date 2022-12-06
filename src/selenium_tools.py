@@ -11,8 +11,8 @@ download_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'e
 def get_webdriver() -> webdriver:
     prefs = {'download.default_directory': download_directory}
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("--disable-dev-shm-usage")
+    #options.add_argument("--headless")
+    #options.add_argument("--disable-dev-shm-usage")
     #options.add_argument("--no-sandbox")
     options.add_experimental_option('prefs', prefs)
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
