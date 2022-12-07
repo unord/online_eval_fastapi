@@ -65,9 +65,12 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
 
     # Login
-    driver.find_element(By.ID, 'email').send_keys(username)
-    driver.find_element(By.ID, 'password').send_keys(password)
-    driver.find_element(By.CSS_SELECTOR, 'input.button').click()
+    try:
+        driver.find_element(By.ID, 'email').send_keys(username)
+        driver.find_element(By.ID, 'password').send_keys(password)
+        driver.find_element(By.CSS_SELECTOR, 'input.button').click()
+    except NoSuchElementException:
+        return {'msg': f'Login failed. Reference: {refrence}', 'success': False}
 
 
 
@@ -90,7 +93,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             i += 1
             time.sleep(1)
             if i == 49:
-                return {'msg': 'CSV button not found', 'success': False}
+                return {'msg': f'Link with reference not found. Reference: {refrence}', 'success': False}
 
 
 
@@ -98,8 +101,19 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     driver.find_element(By.PARTIAL_LINK_TEXT, 'afsluttet').click()
 
     # Send csv
-    driver.find_element(By.PARTIAL_LINK_TEXT, 'Analyse').click()
-    eval_url= driver.current_url
+    try:
+        driver.find_element(By.PARTIAL_LINK_TEXT, 'Analyse').click()
+    except NoSuchElementException as e:
+        return {'msg': f'CSV button not found. Reference: {refrence}', 'success': False}
+    except Exception as e:
+        return {'msg': f'CSV button general exception. Reference: {refrence}', 'success': False}
+
+    try:
+        eval_url= driver.current_url
+    except Exception as e:
+        return {'msg': f'Get url from browser exception. Reference: {refrence}', 'success': False}
+
+
     eval_url_parsed = urlparse(eval_url)
     eval_uid = parse_qs(eval_url_parsed.query)
     eval_id = eval_uid.get('uid')[0]
@@ -115,21 +129,9 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             time.sleep(1)
             if i == 49:
                 print('Could not find csv button')
-                return {'msg': 'CSV button not found', 'success': False}
+                return {'msg': f'CSV button not found. Reference: {refrence}', 'success': False}
 
-
-    '''
-    table_rows = driver.find_elements(By.CLASS_NAME, 'tabelle_zeile valign_top')
-    i = 2
-    for row in table_rows:
-        if row.text == refrence:
-            driver.find_element(By.CSS_SELECTOR, f'tr.tabelle_zeile:nth-child({i}) > td:nth-child(4) > a:nth-child(2) > img:nth-child(1)').click()
-            break
-        i += 1
-    
-    '''
     time.sleep(3)
-
 
     #list all files in folder eval_files
     eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
@@ -141,29 +143,25 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             try:
                 os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.csv'))
                 send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.csv'))
-            except FileExistsError:
-                print('File already exists')
-                sys.exit(1)
+            except FileExistsError as e:
+                return {'msg': f'File already exists. class: {link_name}', 'success': False}
             except Exception as e:
-                print(e)
-                sys.exit(1)
-            #os.rename(file, f'{link_to_reference}-{refrence}.csv')
-
-            print(f'file renamed to {link_name}-{refrence}.csv')
-
+                return {'msg': f'Could not rename file. class: {link_name}', 'success': False}
 
     #send csv file to teacher via unord_mail
-    print(send_file_list)
     subject = f'Eval afsluttet: {link_name}'
-    msg = f'Hej {teacher_initials.upper},\n\n' \
+    msg = f'Hej {teacher_initials.upper()},\n\n' \
           f'Undersøgelsen er nu afsluttet. Den kan finde resultatet vedhæftet fil.\n\n' \
           f'Hvis mod forventing ikke er vedhæftede en fil med resultater så skriv til helpdesk@unord.dk.\n\n' \
           f'Med venlig hilsen\n\n Gorm Reventlow'
 
     bcc_list =['gorm@reventlow.com', 'gore@unord.dk']
 
-    unord_mail.send_email_with_attachments('un-infoscreen@unord.dk', reciver_list, subject, msg, [], bcc_list, send_file_list)
-
+    try:
+        unord_mail.send_email_with_attachments('ubot@unord.dk', reciver_list, subject, msg, [], bcc_list, send_file_list)
+    except Exception as e:
+        return {'msg': f'Could not send email {subject}', 'success': False}
+    driver.quit()
     return {'msg': 'success', 'success': True}
 
 

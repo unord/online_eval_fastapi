@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from . import tools
+from . import tools, unord_mail
 app = FastAPI()
 
 
@@ -22,6 +22,7 @@ def close_eval_and_send_csv(close_eval_and_send_csv: CloseEvalAndSendCsv) -> dic
     if msg['success']:
         return {'msg': 'success', 'success': True}
     else:
+        unord_mail.send_email_with_attachments('ubot@unord.dk', ['gore@unord.dk'], 'Online-Eval-FastApi Error', str(msg), [], [], [])
         return {'msg': 'failed', 'success': False}
 
 def main():
