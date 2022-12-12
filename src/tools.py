@@ -156,7 +156,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
           f'Hvis mod forventing ikke er vedhæftede en fil med resultater så skriv til helpdesk@unord.dk.\n\n' \
           f'Med venlig hilsen\n\n Gorm Reventlow'
 
-    bcc_list =['gorm@reventlow.com', 'gore@unord.dk']
+    bcc_list =['gorm@reventlow.com', 'gore@unord.dk', 'hefa@unord.dk']
 
     try:
         unord_mail.send_email_with_attachments('ubot@unord.dk', reciver_list, subject, msg, [], bcc_list, send_file_list)
