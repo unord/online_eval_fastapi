@@ -1,5 +1,5 @@
 import sys
-
+from decouple import config
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -122,7 +122,8 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     i = 0
     while not csv_button_found or i < 50:
         try:
-            driver.find_element(By.LINK_TEXT, 'CSV').click()
+            pdf_file = driver.find_element(By.CSS_SELECTOR, 'span.js-pdf-button:nth-child(6) > span:nth-child(1) > a:nth-child(1)')
+            driver.execute_script("arguments[0].click();", pdf_file)
             break
         except NoSuchElementException:
             i += 1
@@ -137,11 +138,11 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
     send_file_list = []
     for file in eval_files:
-        if eval_id in file and '.csv' in file:
+        if 'output.pdf' in file:
             #rename file to eval_id
             print(f'file found {file}')
             try:
-                os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.csv'))
+                os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.pdf'))
                 send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.csv'))
             except FileExistsError as e:
                 return {'msg': f'File already exists. class: {link_name}', 'success': False}
@@ -168,7 +169,10 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
 
 def main():
-    pass
+    close_eval_and_send_csv(config('EVAL_EMAIL'),
+                            config('EVAL_PASSWORD'),
+                            config('EVAL_TEST_REF'),
+                            config('EVAL_TEST_INITIALS'))
 
 if __name__ == '__main__':
     main()
