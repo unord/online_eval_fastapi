@@ -143,7 +143,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             print(f'file found {file}')
             try:
                 os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.pdf'))
-                send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.csv'))
+                send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.pdf'))
             except FileExistsError as e:
                 return {'msg': f'File already exists. class: {link_name}', 'success': False}
             except Exception as e:
