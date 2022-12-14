@@ -59,7 +59,7 @@ def string_to_filename(string: str) -> str:
 def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher_initials: str) -> dict:
     driver = selenium_tools.get_webdriver()
     driver.get(eval_login_url)
-
+    print(f'login page loaded: {driver.current_url}')
     reciver_list = [teacher_initials + '@unord.dk']
     link_name = ""
 
@@ -69,7 +69,11 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         driver.find_element(By.ID, 'email').send_keys(username)
         driver.find_element(By.ID, 'password').send_keys(password)
         driver.find_element(By.CSS_SELECTOR, 'input.button').click()
-    except NoSuchElementException:
+    except NoSuchElementException as e:
+        print(f'login failed: {driver.current_url}, error: {e}')
+        return {'msg': f'Login failed. Reference: {refrence}', 'success': False}
+    except Exception as e:
+        print(f'login failed: {driver.current_url}, error: {e}')
         return {'msg': f'Login failed. Reference: {refrence}', 'success': False}
 
 
@@ -93,6 +97,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             i += 1
             time.sleep(1)
             if i == 49:
+                print(f'Link with reference not found: {driver.current_url}, error: {e}')
                 return {'msg': f'Link with reference not found. Reference: {refrence}', 'success': False}
 
 
@@ -104,9 +109,11 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     try:
         driver.find_element(By.PARTIAL_LINK_TEXT, 'Analyse').click()
     except NoSuchElementException as e:
-        return {'msg': f'CSV button not found. Reference: {refrence}', 'success': False}
+        print(f'Analyse link not found: {driver.current_url}, error: {e}')
+        return {'msg': f'Analyse link not found: {refrence}', 'success': False}
     except Exception as e:
-        return {'msg': f'CSV button general exception. Reference: {refrence}', 'success': False}
+        print(f'General error when clicking "Analyse": {driver.current_url}, error: {e}')
+        return {'msg': f'General error when clicking "Analyse". Reference: {refrence}', 'success': False}
 
     try:
         eval_url= driver.current_url
@@ -129,8 +136,8 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             i += 1
             time.sleep(1)
             if i == 49:
-                print('Could not find csv button')
-                return {'msg': f'CSV button not found. Reference: {refrence}', 'success': False}
+                print(f'Could not find pdf button. Current url: {driver.current_url}')
+                return {'msg': f'pdf button not found. Reference: {refrence}', 'success': False}
 
     time.sleep(3)
 
