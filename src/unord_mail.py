@@ -4,11 +4,16 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os.path import basename
 import smtplib
+import ssl
 
 
 
 def send_email_with_attachments(sender: str, receivers: list, subject: str, body: str,
                                 ccs: list, bccs: list, files: list = []):
+    # Create context (to specify TLS version)
+    sc = ssl.create_default_context()
+    sc.options |= ssl.OP_NO_TLSv1_2 | ssl.OP_NO_TLSv1_3
+    sc.minimum_version = ssl.TLSVersion["TLSv1_1"]
 
     msg = MIMEMultipart()
     msg['From'] = sender
@@ -30,7 +35,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
         msg['Bcc'] = ', '.join(bccs)
     receivers = receivers + ccs + bccs
     server = smtplib.SMTP('smtp.efif.dk', 25)
-    server.starttls()
+    server.starttls(context=sc)
     server.login(config('EMAIL_USER'), config('EMAIL_PASSWORD'))
     text = msg.as_string()
     server.sendmail(sender,  receivers, text)
