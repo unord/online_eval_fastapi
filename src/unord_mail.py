@@ -30,7 +30,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
         msg['Bcc'] = ', '.join(bccs)
     receivers = receivers + ccs + bccs
     server = smtplib.SMTP('smtp.efif.dk', 25)
-    server.starttls()
+    #server.starttls()
     server.login(config('EMAIL_USER'), config('EMAIL_PASSWORD'))
     text = msg.as_string()
     server.sendmail(sender,  receivers, text)
