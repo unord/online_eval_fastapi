@@ -6,8 +6,8 @@ from os.path import basename
 import smtplib
 import ssl
 
-from mailer import Mailer
-from mailer import Message
+#from mailer import Mailer
+#from mailer import Message
 
 
 
@@ -55,6 +55,7 @@ def send_test_email(reciver_list: list):
         []
     )
 
+'''
 def send_email_with_attachments_with_mailer(sender: str, receivers: list, subject: str, body: str, ccs: list, bccs: list, files: list = []):
     message = Message(From=sender, To=receivers,  Subject=subject, charset="utf-8")
     if ccs is not None:
@@ -69,6 +70,7 @@ def send_email_with_attachments_with_mailer(sender: str, receivers: list, subjec
     #mailer.starttls()
     mailer.login(config('EMAIL_USER'), pwd=config('EMAIL_PASSWORD'))
     mailer.send(message)
+'''
 
 def main():
     send_test_email(['gore@unord.dk'])
