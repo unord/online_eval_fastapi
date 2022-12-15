@@ -13,6 +13,8 @@ import ssl
 
 def send_email_with_attachments(sender: str, receivers: list, subject: str, body: str,
                                 ccs: list, bccs: list, files: list = []):
+    # Create a secure SSL context
+    context = ssl.create_default_context()
 
     msg = MIMEMultipart()
     msg['From'] = sender
