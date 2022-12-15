@@ -37,8 +37,19 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
     server.quit()
 
 
+def send_test_email(reciver_list: list):
+    send_email_with_attachments(
+        'ubot@unord.dk',
+        reciver_list,
+        'Online-Eval-FastApi Test',
+        'This is a test email from Online-Eval-FastApi',
+        [],
+        [],
+        []
+    )
+
 def main():
-    pass
+    send_test_email(['gore@unord.dk'])
 
 
 if __name__ == '__main__':
