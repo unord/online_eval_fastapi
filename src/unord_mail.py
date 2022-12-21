@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 from os.path import basename
 import smtplib
 import ssl
+import time
 
 #from mailer import Mailer
 #from mailer import Message
@@ -12,7 +13,7 @@ import ssl
 
 
 def send_email_with_attachments(sender: str, receivers: list, subject: str, body: str,
-                                ccs: list, bccs: list, files: list = []):
+                                ccs: list, bccs: list, files: list = []) -> dict:
     # Create a secure SSL context
     context = ssl.create_default_context()
 
@@ -35,15 +36,39 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
     if bccs is not None:
         msg['Bcc'] = ', '.join(bccs)
     receivers = receivers + ccs + bccs
-    server = smtplib.SMTP('smtp.efif.dk', 25)
+    try:
+        server = smtplib.SMTP('smtp.efif.dk', 25)
+    except Exception as e:
+        print(f'Could not connect to smtp server. {e}')
+        print("waiting 10 minutes and trying again: server = smtplib.SMTP('smtp.efif.dk', 25)")
+        time.sleep(600)
+        try:
+            server = smtplib.SMTP('smtp.efif.dk', 25)
+        except Exception as e:
+            print(f'Second attempt: Could not connect to smtp server. {e}')
+            print('failed to send email')
+            return {'msg': 'Failed to send email', 'success': False}
+        server = smtplib.SMTP('smtp.efif.dk', 25)
     # creating the SMTP server object by giving SMPT server address and port number
     server.ehlo()  # setting the ESMTP protocol
     server.starttls()  # setting up to TLS connection
     server.ehlo()  # calling the ehlo() again as encryption happens on calling startttls()
     server.login(config('EMAIL_USER'), config('EMAIL_PASSWORD'))
     text = msg.as_string()
-    server.sendmail(sender,  receivers, text)
+    try:
+        server.sendmail(sender,  receivers, text)
+    except Exception as e:
+        print(f'Could not connect to smtp server. {e}')
+        print('waiting 10 minutes and trying again: server.sendmail(sender,  receivers, text)')
+        time.sleep(600)
+        try:
+            server.sendmail(sender,  receivers, text)
+        except Exception as e:
+            print(f'Second attempt: Could not connect to smtp server. {e}')
+            print('failed to send email')
+            return {'msg': 'Failed to send email', 'success': False}
     server.quit()
+    return {'msg': 'Email sent', 'success': True}
 
 
 def send_test_email(reciver_list: list):
