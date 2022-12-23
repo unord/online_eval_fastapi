@@ -15,7 +15,7 @@ import time
 def send_email_with_attachments(sender: str, receivers: list, subject: str, body: str,
                                 ccs: list, bccs: list, files: list = []) -> dict:
     # Create a secure SSL context
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    context = ssl.create_default_context()
 
     msg = MIMEMultipart()
     msg['From'] = sender
