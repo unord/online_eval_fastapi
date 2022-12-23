@@ -50,7 +50,9 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
             return {'msg': 'Failed to send email', 'success': False}
         server = smtplib.SMTP('smtp.efif.dk', 25)
     try:
+        server.ehlo()
         server.starttls(context=context)  # setting up to TLS connection
+        server.ehlo()
     except Exception as e:
         print(f'Could not start TLS connection. {e}')
     server.login(config('EMAIL_USER'), config('EMAIL_PASSWORD'))
