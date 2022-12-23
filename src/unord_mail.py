@@ -37,7 +37,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
         msg['Bcc'] = ', '.join(bccs)
     receivers = receivers + ccs + bccs
     try:
-        server = smtplib.SMTP_SSL('smtp.efif.dk', 587)
+        server = smtplib.SMTP('smtp.efif.dk', 25)
     except Exception as e:
         print(f'Could not connect to smtp server. {e}')
         print("waiting 10 minutes and trying again: server = smtplib.SMTP('smtp.efif.dk', 25)")
