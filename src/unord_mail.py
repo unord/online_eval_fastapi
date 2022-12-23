@@ -15,7 +15,7 @@ import time
 def send_email_with_attachments(sender: str, receivers: list, subject: str, body: str,
                                 ccs: list, bccs: list, files: list = []) -> dict:
     # Create a secure SSL context
-    context = ssl.create_default_context()
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 
     msg = MIMEMultipart()
     msg['From'] = sender
@@ -37,7 +37,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
         msg['Bcc'] = ', '.join(bccs)
     receivers = receivers + ccs + bccs
     try:
-        server = smtplib.SMTP('smtp.efif.dk', 25)
+        server = smtplib.SMTP('smtp.efif.dk', 25, context=context)
     except Exception as e:
         print(f'Could not connect to smtp server. {e}')
         print("waiting 10 minutes and trying again: server = smtplib.SMTP('smtp.efif.dk', 25)")
@@ -49,7 +49,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
             print('failed to send email')
             return {'msg': 'Failed to send email', 'success': False}
         server = smtplib.SMTP('smtp.efif.dk', 25)
-    server.starttls(ssl_version=ssl.PROTOCOL_TLSv1_2)  # setting up to TLS connection
+    #server.starttls()  # setting up to TLS connection
     server.login(config('EMAIL_USER'), config('EMAIL_PASSWORD'))
     text = msg.as_string()
     try:
