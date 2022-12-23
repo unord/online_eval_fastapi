@@ -55,6 +55,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
         server.ehlo()
     except Exception as e:
         print(f'Could not start TLS connection. {e}')
+        server.starttls(context=ssl.create_default_context(ssl.Purpose.SERVER_AUTH, version=ssl.PROTOCOL_TLSv1_1))
     server.login(config('EMAIL_USER'), config('EMAIL_PASSWORD'))
     text = msg.as_string()
     try:
