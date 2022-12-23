@@ -49,7 +49,10 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
             print('failed to send email')
             return {'msg': 'Failed to send email', 'success': False}
         server = smtplib.SMTP('smtp.efif.dk', 25)
-    server.starttls(context=context)  # setting up to TLS connection
+    try:
+        server.starttls(context=context)  # setting up to TLS connection
+    except Exception as e:
+        print(f'Could not start TLS connection. {e}')
     server.login(config('EMAIL_USER'), config('EMAIL_PASSWORD'))
     text = msg.as_string()
     try:
