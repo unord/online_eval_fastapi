@@ -52,7 +52,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
     try:
         server.ehlo()
         #server.starttls(context=context)  # setting up to TLS connection
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+        context = ssl.SSLContext()
         server.ehlo()
     except Exception as e:
         print(f'Could not start TLS connection. {e}')
