@@ -43,7 +43,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
         print("waiting 10 minutes and trying again: server = smtplib.SMTP('smtp.efif.dk', 25)")
         time.sleep(600)
         try:
-            server = smtplib.SMTP('smtp.efif.dk', 25)
+            server = smtplib.SMTP('smtp.efif.dk', 587)
         except Exception as e:
             print(f'Second attempt: Could not connect to smtp server. {e}')
             print('failed to send email')
