@@ -53,8 +53,8 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
     server.ehlo()
     #server.starttls(context=context)  # setting up to TLS connection
     context = ssl.create_default_context()
-    context.options = ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2
-    context.minimum_version = ssl.TLSVersion ["TLSv1_3"]
+    context.options = ssl.OP_NO_TLSv1_1
+    context.minimum_version = ssl.TLSVersion ["TLSv1_2"]
     server.set_debuglevel(1)
     server.starttls(context=context)
     server.ehlo()
