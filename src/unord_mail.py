@@ -43,7 +43,7 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
         print("waiting 10 minutes and trying again: server = smtplib.SMTP('smtp.efif.dk', 25)")
         time.sleep(600)
         try:
-            server = smtplib.SMTP('smtp.efif.dk', 587)
+            server = smtplib.SMTP('smtp.efif.dk', 25)
         except Exception as e:
             print(f'Second attempt: Could not connect to smtp server. {e}')
             print('failed to send email')
@@ -53,7 +53,10 @@ def send_email_with_attachments(sender: str, receivers: list, subject: str, body
     server.ehlo()
     #server.starttls(context=context)  # setting up to TLS connection
     context = ssl.create_default_context()
-    server.starttls()
+    context.options = ssl.OP_NO_TLSv1_2 | ssl.OP_NO_TLSv1_3
+    context.minimum_version = ssl.TLSVersion ["TLSv1_1"]
+    server.set_debuglevel(1)
+    server.starttls(context=context)
     server.ehlo()
 
 
