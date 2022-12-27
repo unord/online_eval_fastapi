@@ -2,7 +2,7 @@
 FROM alpine:latest
 
 # Install Git, Python 3.11, and Google Chrome
-RUN apk add --update git python3=3.11* google-chrome
+RUN apk add --update git python3 google-chrome
 
 
 
