@@ -1,8 +1,9 @@
-# install alpine linux
-FROM alpine:latest
+FROM selenium/standalone-chrome
 
-# Install Git, Python 3.11, and Google Chrome
-RUN apk add --update git python3 google-chrome
+USER root
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python3 get-pip.py
+RUN python3 -m pip install selenium
 
 
 
