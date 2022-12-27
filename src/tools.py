@@ -8,7 +8,7 @@ from urllib.parse import urlparse, parse_qs
 from src import selenium_tools, unord_mail
 import os
 import time
-import datetime
+from datetime import datetime
 
 
 eval_login_url = 'https://www.onlineundersoegelse.dk/log-ind'
