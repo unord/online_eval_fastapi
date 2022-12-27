@@ -1,9 +1,6 @@
 FROM selenium/standalone-chrome
 
-USER root
-RUN wget https://bootstrap.pypa.io/get-pip.py
-RUN python3 get-pip.py
-RUN python3 -m pip install selenium
+RUN apt-get update && apt-get install -y python3 git
 
 
 
@@ -18,7 +15,7 @@ WORKDIR /code
 COPY ./requirements.txt code/src/requirements.txt
 
 #
-RUN pip install --no-cache-dir --upgrade -r code/src/requirements.txt
+RUN pip3 install --no-cache-dir --upgrade -r code/src/requirements.txt
 
 #
 COPY . /code/
