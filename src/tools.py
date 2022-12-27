@@ -79,7 +79,12 @@ def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
                 print(f'Link with reference not found: {driver.current_url}, error: {e}')
                 print(f'Current url: {driver.current_url}')
                 return {'msg': f'Link with reference not found. Reference: {refrence}', 'success': False}
-        driver.find_element(By.PARTIAL_LINK_TEXT, 'afsluttet').click()
+        try:
+            time.sleep(3)
+            driver.find_element(By.PARTIAL_LINK_TEXT, 'afsluttet').click()
+        except NoSuchElementException as e:
+            print(f'Link "afslutede" with reference not found: {driver.current_url}, error: {e}')
+            return {'msg': f'Link "afslutede" with reference not found. Reference: {refrence}', 'success': True, 'link_name': link_name}
         return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True, 'link_name': link_name}
 
 def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
@@ -146,9 +151,8 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     if not this_msg['success']:
         this_msg =find_closed_eval_from_refrence(refrence, driver)
         print(this_msg['msg'])
-
-    if not this_msg['success']:
-        return this_msg
+        if not this_msg['success']:
+            return this_msg
 
 
     # Send pdf
