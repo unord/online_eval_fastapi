@@ -109,7 +109,6 @@ def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
             link_to_reference.click()
 
             link_found = True
-            i = 50
         except NoSuchElementException as e:
             if 'https://www.onlineundersoegelse.dk/?url=survey_det&uid=' in driver.current_url:
                 break
@@ -163,6 +162,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             return this_msg
 
 
+    print('Finding Analyse page')
     # Send pdf
     analyse_found = False
     i = 0
@@ -170,6 +170,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         print(f'Current url: {driver.current_url}')
         this_msg = click_on_element_by_partial_link_text('Analyse', driver)
         if this_msg['success']:
+            print('Analyse page found')
             analyse_found = True
         else:
             i += 1
@@ -178,6 +179,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
                 return {'msg': f'Analyse not found. Reference: {refrence}', 'success': False}
 
 
+    print('Finding pdf file')
     try:
         eval_url= driver.current_url
     except Exception as e:
@@ -194,7 +196,8 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         try:
             pdf_file = driver.find_element(By.CSS_SELECTOR, 'span.js-pdf-button:nth-child(6) > span:nth-child(1) > a:nth-child(1)')
             driver.execute_script("arguments[0].click();", pdf_file)
-            break
+            print('Pdf file found and downloaded')
+            pdf_button_found = True
         except NoSuchElementException:
             i += 1
             time.sleep(1)
@@ -206,7 +209,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
     # Datetime now
     now = datetime.now()
-
+    print('Rename pdf file')
     #list all files in folder eval_files
     eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
     send_file_list = []
@@ -222,6 +225,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             except Exception as e:
                 return {'msg': f'Could not rename file. class: {link_name}', 'success': False}
 
+    print('Send pdf file')
     #send pdf file to teacher via unord_mail
     subject = f'Eval afsluttet: {link_name}'
     msg = f'Hej {teacher_initials.upper()},\n\n' \
@@ -236,6 +240,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     except Exception as e:
         return {'msg': f'Could not send email {subject}', 'success': False}
     driver.quit()
+    print('Task Done')
     return {'msg': 'success', 'success': True}
 
 
