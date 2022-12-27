@@ -90,6 +90,8 @@ def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
 
 def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
     driver.find_element(By.PARTIAL_LINK_TEXT, 'Afsluttede undersøgelser').click()
+    print(f'Current url: {driver.current_url}')
+    print(f'Looking for eval with refrence: {refrence}')
 
     # Find eval
     link_found = False
