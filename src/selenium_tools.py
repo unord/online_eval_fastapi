@@ -1,6 +1,7 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 import os
 
@@ -9,13 +10,15 @@ download_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'e
 
 
 def get_webdriver() -> webdriver:
+    time.sleep(3)
     prefs = {'download.default_directory': download_directory}
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     options.add_experimental_option('prefs', prefs)
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    #driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    driver = webdriver.Remote("http://selenium:4444/wd/hub", DesiredCapabilities.CHROME)
     return driver
 
 

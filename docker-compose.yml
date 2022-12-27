@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - 4444:4444
+    restart: always
+
+  online-eval-fastapi:
+    build:
+        context: .
+    ports:
+      - 8000:80
+    depends_on:
+      - selenium
+    restart: always
