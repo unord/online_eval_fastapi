@@ -15,7 +15,7 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - /home/robo/docker-volumes/eval-files:app/src/eval_files
+      - /home/robo/docker-volumes/eval-files:/src/eval_files
     depends_on:
       - selenium
     restart: always
