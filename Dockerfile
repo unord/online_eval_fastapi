@@ -1,6 +1,6 @@
 FROM selenium/standalone-chrome
 
-RUN apt-get update && apt-get install -y git
+
 
 
 
