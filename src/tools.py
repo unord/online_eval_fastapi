@@ -84,8 +84,9 @@ def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
             driver.find_element(By.PARTIAL_LINK_TEXT, 'afsluttet').click()
         except NoSuchElementException as e:
             print(f'Link "afslutede" with reference not found: {driver.current_url}, error: {e}')
-            return {'msg': f'Link "afslutede" with reference not found. Reference: {refrence}', 'success': True, 'link_name': link_name}
-        return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True, 'link_name': link_name}
+            print(f'Current url: {driver.current_url}')
+            return {'msg': f'Link "afslutede" with reference not found. Reference: {refrence}', 'success': True}
+        return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True}
 
 def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
     driver.find_element(By.PARTIAL_LINK_TEXT, 'Afsluttede undersøgelser').click()
