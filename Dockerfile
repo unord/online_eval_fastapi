@@ -5,42 +5,10 @@ FROM alpine:latest
 RUN apk add --no-cache git python3
 
 # install chrome dependencies
-RUN apk add --no-cache \
-    bash \
-    libX11 \
-    libX11-xcb \
-    libXcomposite \
-    libXcursor \
-    libXdamage \
-    libXext \
-    libXfixes \
-    libXi \
-    libXrender \
-    libXtst \
-    libXrandr \
-    libXv \
-    libXxf86vm \
-    libstdc++ \
-    mesa-gl \
-    mesa-dri-swrast \
-    atk \
-    pango \
-    gtk+3.0 \
-    cairo \
-    gdk-pixbuf \
-    mpc \
-    mpfr \
-    gmp \
-    libgomp \
-    freetype \
-    fontconfig \
-    ttf-freefont \
-    ttf-opensans \
-    harfbuzz \
-    fribidi \
-    icu-libs \
-    unzip \
-    wget
+RUN apk add --no-cache bash libX11 libX11-xcb libXcomposite libXcursor libXdamage libXext libXfixes libXi libXrender
+RUN apk add --no-cache libXtst libXrandr libXv libXxf86vm libstdc++ mesa-gl mesa-dri-swrast atk pango gtk+3.0 cairo
+RUN apk add --no-cache gdk-pixbuf mpc mpfr gmp libgomp freetype fontconfig ttf-freefont ttf-opensans harfbuzz
+RUN apk add --no-cache fribidi icu-libs unzip wget
 
 # install google chrome
 RUN wget -O /tmp/google-chrome.zip https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
