@@ -1,5 +1,8 @@
-#
-FROM python:3.11
+# install alpine linux
+FROM alpine:latest
+
+# install python and git
+RUN apk add --no-cache git python3
 
 # install google chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -20,13 +23,13 @@ ENV DISPLAY=:99
 WORKDIR /code
 
 #
-COPY ./requirements.txt /src/requirements.txt
+COPY ./requirements.txt code/src/requirements.txt
 
 #
-RUN pip install --no-cache-dir --upgrade -r /src/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r code/src/requirements.txt
 
 #
-COPY ./src /code/src
+COPY . /code/
 
 #
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
