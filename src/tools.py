@@ -132,6 +132,11 @@ def click_on_element_by_partial_link_text(link_text: str, driver: webdriver) -> 
 
 
 def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher_initials: str) -> dict:
+
+    #Download directory
+    download_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files')
+    print(f'Download directory: {download_directory}')
+
     driver = selenium_tools.get_webdriver()
     driver.get(eval_login_url)
     print(f'login page loaded: {driver.current_url}')
