@@ -4,16 +4,52 @@ FROM alpine:latest
 # install python and git
 RUN apk add --no-cache git python3
 
-# install google chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-RUN apt-get -y update
-RUN apt-get install -y google-chrome-stable
+# install chrome dependencies
+RUN apk add --no-cache \
+    bash \
+    libX11 \
+    libX11-xcb \
+    libXcomposite \
+    libXcursor \
+    libXdamage \
+    libXext \
+    libXfixes \
+    libXi \
+    libXrender \
+    libXtst \
+    libXrandr \
+    libXv \
+    libXxf86vm \
+    libstdc++ \
+    mesa-gl \
+    mesa-dri-swrast \
+    atk \
+    pango \
+    gtk+3.0 \
+    cairo \
+    gdk-pixbuf \
+    mpc \
+    mpfr \
+    gmp \
+    libgomp \
+    freetype \
+    fontconfig \
+    ttf-freefont \
+    ttf-opensans \
+    harfbuzz \
+    fribidi \
+    icu-libs \
+    unzip \
+    wget
 
-# install chromedriver
-RUN apt-get install -yqq unzip
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
-RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+# install google chrome
+RUN wget -O /tmp/google-chrome.zip https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    unzip /tmp/google-chrome.zip -d /opt && \
+    rm /tmp/google-chrome.zip
+
+COPY start-chrome /usr/bin/start-chrome
+RUN chmod +x /usr/bin/start-chrome
+CMD ["/usr/bin/start-chrome"]
 
 # set display port to avoid crash
 ENV DISPLAY=:99
