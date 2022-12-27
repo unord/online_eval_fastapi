@@ -239,10 +239,11 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
     try:
         unord_mail.send_email_with_attachments('ubot@unord.dk', reciver_list, subject, msg, [], bcc_list, send_file_list)
+        print('Task Done')
     except Exception as e:
+        print(f'Could not send email. Error: {e}')
         return {'msg': f'Could not send email {subject}', 'success': False}
     driver.quit()
-    print('Task Done')
     return {'msg': 'success', 'success': True}
 
 
