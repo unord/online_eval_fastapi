@@ -113,7 +113,8 @@ def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
                 print(f'Link with reference not found: {driver.current_url}, error: {e}')
                 print(f'Current url: {driver.current_url}')
                 return {'msg': f'Link with reference not found. Reference: {refrence}', 'success': False}
-        return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True, 'link_name': link_name}
+        print(f'Current url: {driver.current_url}')
+        return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True}
 
 def click_on_element_by_partial_link_text(link_text: str, driver: webdriver) -> dict:
     try:
@@ -160,6 +161,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     analyse_found = False
     i = 0
     while not analyse_found or i < 50:
+        print(f'Current url: {driver.current_url}')
         this_msg = click_on_element_by_partial_link_text('Analyse', driver)
         if this_msg['success']:
             analyse_found = True
