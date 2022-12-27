@@ -6,6 +6,8 @@ services:
     ports:
       - 4444:4444
     restart: always
+    volumes:
+      - /home/robo/docker-volumes/eval-files:/Downloads
 
   online-eval-fastapi:
     build:
@@ -13,7 +15,7 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - ./src/eval_files:/home/robo/docker-volumes/eval-files
+      - /home/robo/docker-volumes/eval-files:./src/eval_files
     depends_on:
       - selenium
     restart: always
