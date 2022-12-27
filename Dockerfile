@@ -1,6 +1,10 @@
 # install alpine linux
 FROM alpine:latest
 
+
+
+RUN apk --no-cache update
+
 # install python and git
 RUN apk add --no-cache git python3
 
