@@ -113,6 +113,7 @@ def click_on_element_by_partial_link_text(link_text: str, driver: webdriver) -> 
         return {'msg': f'Clicked on element with link text: {link_text}', 'success': True}
     except NoSuchElementException as e:
         print(f'Element with link text not found: {link_text}, error: {e}')
+        print(f'Current url: {driver.current_url}')
         return {'msg': f'Element with link text not found. Link text: {link_text}', 'success': False}
 
 
@@ -142,6 +143,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     this_msg = find_open_eval_from_refrence(refrence, driver)
     if not this_msg['success']:
         this_msg =find_closed_eval_from_refrence(refrence, driver)
+        print(this_msg['msg'])
 
     if not this_msg['success']:
         return this_msg
