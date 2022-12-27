@@ -199,6 +199,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             driver.execute_script("arguments[0].click();", pdf_file)
             print('Pdf file found and downloaded')
             pdf_button_found = True
+            i = 50
         except NoSuchElementException:
             i += 1
             time.sleep(1)
