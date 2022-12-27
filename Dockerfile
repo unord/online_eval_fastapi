@@ -3,9 +3,8 @@ RUN apk add --no-cache git
 
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
-COPY .env ./
-RUN git clone git://github.com/ansible/ansible.git --recursive
+COPY . ./app
 RUN pip install -r /app/requirements.txt
 
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app.src.main:app", "--host", "0.0.0.0", "--port", "80"]
