@@ -87,7 +87,7 @@ def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
         except NoSuchElementException as e:
             print(f'Link "afslutede" with reference not found: {driver.current_url}, error: {e}')
             print(f'Current url: {driver.current_url}')
-            return {'msg': f'Link "afslutede" with reference not found. Reference: {refrence}', 'success': True}
+            return {'msg': f'Link "afslutede" with reference not found. Reference: {refrence}', 'success': False}
         return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True}
 
 def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
