@@ -1,24 +1,11 @@
-FROM selenium/standalone-chrome
+FROM python:3.11-alpine
+RUN apk add --no-cache git
+
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY .env ./
+RUN git clone git://github.com/ansible/ansible.git --recursive
+RUN pip install -r /app/requirements.txt
 
 
-
-
-
-# set display port to avoid crash
-ENV DISPLAY=:99
-
-
-#
-WORKDIR /code
-
-#
-COPY ./requirements.txt code/src/requirements.txt
-
-#
-RUN pip install --no-cache-dir --upgrade -r code/src/requirements.txt
-
-#
-COPY . /code/
-
-#
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
