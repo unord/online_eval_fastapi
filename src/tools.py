@@ -77,6 +77,7 @@ def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
             time.sleep(1)
             if i == 49:
                 print(f'Link with reference not found: {driver.current_url}, error: {e}')
+                print(f'Current url: {driver.current_url}')
                 return {'msg': f'Link with reference not found. Reference: {refrence}', 'success': False}
         driver.find_element(By.PARTIAL_LINK_TEXT, 'afsluttet').click()
         return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True, 'link_name': link_name}
@@ -104,6 +105,7 @@ def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
             time.sleep(1)
             if i == 49:
                 print(f'Link with reference not found: {driver.current_url}, error: {e}')
+                print(f'Current url: {driver.current_url}')
                 return {'msg': f'Link with reference not found. Reference: {refrence}', 'success': False}
         return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True, 'link_name': link_name}
 
