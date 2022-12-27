@@ -57,6 +57,8 @@ def string_to_filename(string: str) -> str:
     return string
 
 def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
+    print(f'Looking through open evals with refrence: {refrence}')
+
     # Find eval
     link_found = False
     i = 0
@@ -89,6 +91,7 @@ def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
         return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True}
 
 def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
+    print(f'Looking through closed evals with refrence: {refrence}')
     driver.find_element(By.PARTIAL_LINK_TEXT, 'Afsluttede undersøgelser').click()
     print(f'Current url: {driver.current_url}')
     print(f'Looking for eval with refrence: {refrence}')
