@@ -8,20 +8,14 @@ RUN apk --no-cache update
 # install python and git
 RUN apk add --no-cache git python3
 
-# install chrome dependencies
-RUN apk add --no-cache bash libX11 libX11-xcb libXcomposite libXcursor libXdamage libXext libXfixes libXi libXrender
-RUN apk add --no-cache libXtst libXrandr libXv libXxf86vm libstdc++ mesa-gl mesa-dri-swrast atk pango gtk+3.0 cairo
-RUN apk add --no-cache gdk-pixbuf mpc mpfr gmp libgomp freetype fontconfig ttf-freefont ttf-opensans harfbuzz
-RUN apk add --no-cache fribidi icu-libs unzip wget
-
 # install google chrome
-RUN wget -O /tmp/google-chrome.zip https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
-    unzip /tmp/google-chrome.zip -d /opt && \
-    rm /tmp/google-chrome.zip
-
-COPY start-chrome /usr/bin/start-chrome
-RUN chmod +x /usr/bin/start-chrome
-CMD ["/usr/bin/start-chrome"]
+RUN apk update && apk add unzip xvfb libxi6 libgconf-2-4
+RUN apk update && apk add wget \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apk add - \
+    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+    && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk update \
+    && apk add google-chrome-stable ttf-freefont
 
 # set display port to avoid crash
 ENV DISPLAY=:99
