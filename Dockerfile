@@ -15,7 +15,7 @@ WORKDIR /code
 COPY ./requirements.txt code/src/requirements.txt
 
 #
-RUN pip3 install --no-cache-dir --upgrade -r code/src/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r code/src/requirements.txt
 
 #
 COPY . /code/
