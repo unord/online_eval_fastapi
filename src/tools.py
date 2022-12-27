@@ -172,6 +172,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         if this_msg['success']:
             print('Analyse page found')
             analyse_found = True
+            i = 50
         else:
             i += 1
             time.sleep(1)
