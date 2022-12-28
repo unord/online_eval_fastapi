@@ -119,7 +119,7 @@ def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
                 print(f'Current url: {driver.current_url}')
                 return {'msg': f'Link with reference not found. Reference: {refrence}', 'success': False}
     print(f'Current url: {driver.current_url}')
-    return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True}
+    return {'msg': f'Link with reference found. Reference: {refrence}', 'success': True, 'link_name': link_name}
 
 def click_on_element_by_partial_link_text(link_text: str, driver: webdriver) -> dict:
     try:
@@ -166,6 +166,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         if not this_msg['success']:
             return this_msg
 
+    link_name = this_msg['link_name']
 
     print('Finding Analyse page')
     # Send pdf
@@ -228,7 +229,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             print(f'file found {file}')
             try:
                 os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
-                send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{eval_id}.pdf'))
+                send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
             except FileExistsError as e:
                 return {'msg': f'File already exists. class: {link_name}', 'success': False}
             except Exception as e:
