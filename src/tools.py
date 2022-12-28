@@ -218,8 +218,9 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     now = datetime.now()
     print('Rename pdf file')
     #list all files in folder eval_files
-    # eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
-    eval_files = os.listdir('./eval_files')
+    eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
+    print(f'eval_files: {eval_files}')
+    #eval_files = os.listdir('./eval_files')
     send_file_list = []
     for file in eval_files:
         if 'output' in file:
