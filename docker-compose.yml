@@ -7,7 +7,7 @@ services:
       - 4444:4444
     restart: always
     volumes:
-      - /home/robo/docker-volumes/eval-files:/home/seluser/files
+      - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
 
   online-eval-fastapi:
     build:
