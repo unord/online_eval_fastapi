@@ -9,13 +9,22 @@ services:
     volumes:
       - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
 
-  online-eval-fastapi:
-    build:
-        context: .
-    ports:
-      - 8081:8081
-    volumes:
-      - /home/robo/docker-volumes/eval-files:/app/src/eval_files
-    depends_on:
-      - selenium
-    restart: always
+  worker:
+      image: robounord/online_eval_fastapi:v1.00
+      container_name: fastapi
+      command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+      networks:
+        - public
+      volumes:
+        - /home/robo/docker-volumes/eval-files:/app/src/eval_files
+        - /home/robo/docker-volumes/online_eval_fastapi:/app
+      ports:
+          - 8081:8000
+      depends_on:
+        - selenium
+      restart: always
+
+  networks:
+    public:
+      external: true
+

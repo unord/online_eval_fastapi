@@ -20,7 +20,7 @@ def get_webdriver() -> webdriver:
     options.add_argument("--no-sandbox")
     options.add_experimental_option('prefs', prefs)
     #driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-    driver = webdriver.Remote("http://selenium:4444/wd/hub", DesiredCapabilities.CHROME)
+    driver = webdriver.Remote("http://selenium:4445/wd/hub", DesiredCapabilities.CHROME)
     return driver
 
 
