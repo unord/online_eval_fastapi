@@ -244,7 +244,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     subject = f'Eval afsluttet: {link_name}'
     msg = f'Hej {teacher_initials.upper()},\n\n' \
           f'Undersøgelsen er nu afsluttet. Den kan finde resultatet vedhæftet fil.\n\n' \
-          f'Hvis mod forventing ikke er vedhæftede en fil med resultater så skriv til helpdesk@unord.dk.\n\n' \
+          f'Hvis der mod forventning ikke er vedhæftet en fil med resultater, så skriv til helpdesk@unord.dk.\n\n' \
           f'Med venlig hilsen\n\n Gorm Reventlow'
 
     bcc_list =['gorm@reventlow.com', 'gore@unord.dk', 'hefa@unord.dk']
