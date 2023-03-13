@@ -165,8 +165,12 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         print(this_msg['msg'])
         if not this_msg['success']:
             return this_msg
+    try:
+        link_name = this_msg['link_name']
+    except Exception as e:
+        print("No link name found... exiting (this should not happen)")
+        sys.exit(1)
 
-    link_name = this_msg['link_name']
 
     print('Finding Analyse page')
     # Send pdf
