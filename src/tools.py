@@ -159,6 +159,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
 
     # Find eval
+    time.sleep(10)
     this_msg = find_open_eval_from_refrence(refrence, driver)
     if not this_msg['success']:
         this_msg =find_closed_eval_from_refrence(refrence, driver)
@@ -166,10 +167,10 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         if not this_msg['success']:
             return this_msg
     try:
-        time.sleep(10)
         link_name = this_msg['link_name']
     except Exception as e:
         try:
+            this_msg = find_open_eval_from_refrence(refrence, driver)
             time.sleep(30)
             link_name = this_msg['link_name']
         except Exception as e:
@@ -229,7 +230,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
     print('Rename pdf file')
     #list all files in folder eval_files
     eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
-    print(f'eval_files: {eval_files}')
+    #print(f'eval_files: {eval_files}')
     #eval_files = os.listdir('./eval_files')
     send_file_list = []
     for file in eval_files:
@@ -259,7 +260,16 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         print('Task Done')
     except Exception as e:
         print(f'Could not send email. Error: {e}')
-        return {'msg': f'Could not send email {subject}', 'success': False}
+        print('Will try to send email again in 30 seconds')
+        time.sleep(30)
+        try:
+            unord_mail.send_email_with_attachments('ubot@unord.dk', reciver_list, subject, msg, [], bcc_list,
+                                                   send_file_list)
+            print('Task Done')
+        except Exception as e:
+            print(f'Could not send email in final try. Error: {e}')
+            driver.quit()
+            return {'msg': f'Could not send email. class: {link_name}', 'success': False}
     driver.quit()
     return {'msg': 'success', 'success': True}
 
