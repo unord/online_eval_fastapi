@@ -166,10 +166,15 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
         if not this_msg['success']:
             return this_msg
     try:
+        time.sleep(10)
         link_name = this_msg['link_name']
     except Exception as e:
-        print("No link name found... exiting (this should not happen)")
-        sys.exit(1)
+        try:
+            time.sleep(30)
+            link_name = this_msg['link_name']
+        except Exception as e:
+            print("No link name found... exiting (this should not happen)")
+            sys.exit(1)
 
 
     print('Finding Analyse page')
