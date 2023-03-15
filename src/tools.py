@@ -264,7 +264,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             except FileExistsError as e:
                 return {'msg': f'File already exists. class: {link_name}', 'success': False}
             except Exception as e:
-                return {'msg': f'Could not rename file. class: {link_name}', 'success': False}
+                return {'msg': f'Could not rename file. class: {link_name}, Exception: {e}', 'success': False}
 
     print('Send pdf file')
     #send pdf file to teacher via unord_mail
