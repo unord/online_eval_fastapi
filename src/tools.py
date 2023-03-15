@@ -240,7 +240,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
                 print(f'Could not find pdf button. Current url: {driver.current_url}')
                 return {'msg': f'pdf button not found. Reference: {refrence}', 'success': False}
 
-    time.sleep(3)
+    time.sleep(10)
 
     # Datetime now
     now = datetime.now()
