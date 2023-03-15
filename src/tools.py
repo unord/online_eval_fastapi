@@ -244,6 +244,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
     # Datetime now
     now = datetime.now()
+    now = now.strftime('%Y-%m-%d-%H-%M')
     print('Rename pdf file')
     #list all files in folder eval_files
     eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
