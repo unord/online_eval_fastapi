@@ -256,7 +256,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             #rename file to eval_id
             print(f'file found {file}')
             try:
-                if search_for_string_in_pdf(file, refrence) == True:
+                if search_for_string_in_pdf(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), refrence) == True:
                     os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
                     send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
                 else:
