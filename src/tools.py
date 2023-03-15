@@ -9,6 +9,8 @@ from src import selenium_tools, unord_mail
 import os
 import time
 from datetime import datetime
+import PyPDF2
+import re
 
 
 eval_login_url = 'https://www.onlineundersoegelse.dk/log-ind'
@@ -55,6 +57,21 @@ def string_to_filename(string: str) -> str:
     string = string.replace('__', '_')
     string = string.replace('\t', '_')
     return string
+
+def search_for_string_in_pdf(file_name: str, search_for_string: str) -> bool:
+    # open the pdf file
+    reader = PyPDF2.PdfReader(file_name)
+
+    # get number of pages
+    num_pages = len(reader.pages)
+
+    # extract text and do the search
+    for page in reader.pages:
+        text = page.extract_text()
+        res_search = re.search(search_for_string, text)
+        if not res_search:
+            return False
+        return True
 
 def find_open_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
     print(f'Looking through open evals with refrence: {refrence}')
@@ -238,8 +255,11 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
             #rename file to eval_id
             print(f'file found {file}')
             try:
-                os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
-                send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
+                if search_for_string_in_pdf(file, refrence) == True:
+                    os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
+                    send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
+                else:
+                    return {'msg': f'This file belongs to someone else: {refrence}', 'success': False}
             except FileExistsError as e:
                 return {'msg': f'File already exists. class: {link_name}', 'success': False}
             except Exception as e:
