@@ -118,7 +118,7 @@ def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
     i = 0
     while not link_found or i < 50:
         try:
-            print(f'Looking for link with refrence: {refrence} (try: {i})'
+            print(f'Looking for link with refrence: {refrence} (try: {i})')
             link_to_reference = driver.find_element(By.PARTIAL_LINK_TEXT, refrence)
             time.sleep(1)
             link_name = link_to_reference.get_attribute('innerHTML')
