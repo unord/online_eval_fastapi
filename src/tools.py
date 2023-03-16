@@ -118,12 +118,16 @@ def find_closed_eval_from_refrence(refrence: str, driver: webdriver) -> dict:
     i = 0
     while not link_found or i < 50:
         try:
+            print(f'Looking for link with refrence: {refrence} (try: {i})'
             link_to_reference = driver.find_element(By.PARTIAL_LINK_TEXT, refrence)
             time.sleep(1)
             link_name = link_to_reference.get_attribute('innerHTML')
             link_name = string_to_filename(link_name)
             print(f'Found link with name: {link_name}')
+            print(f'Current url before click: {driver.current_url}')
             link_to_reference.click()
+            time.sleep(2)
+            print(f'Current url after click: {driver.current_url}')
 
             link_found = True
         except NoSuchElementException as e:
