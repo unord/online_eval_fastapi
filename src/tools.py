@@ -163,6 +163,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
     # Login
     try:
+        print(f'Logging in with username: {username} and password: {password}')
         driver.find_element(By.ID, 'email').send_keys(username)
         driver.find_element(By.ID, 'password').send_keys(password)
         driver.find_element(By.CSS_SELECTOR, 'input.button').click()
@@ -177,6 +178,7 @@ def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher
 
     # Find eval
     time.sleep(10)
+    print('Finding eval')
     this_msg = find_open_eval_from_refrence(refrence, driver)
     if not this_msg['success']:
         this_msg =find_closed_eval_from_refrence(refrence, driver)
