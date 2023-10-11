@@ -9,7 +9,7 @@ services:
     volumes:
     - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
   worker:
-    image: robounord/online_eval_fastapi:1.04
+    image: robounord/online_eval_fastapi:1.05
     container_name: fastapi
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
