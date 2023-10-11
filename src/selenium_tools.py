@@ -20,7 +20,8 @@ def get_webdriver() -> webdriver:
     options.add_argument("--no-sandbox")
     options.add_experimental_option('prefs', prefs)
     #driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-    driver = webdriver.Remote("http://10.18.225.150:4444/wd/hub", DesiredCapabilities.CHROME)
+    #driver = webdriver.Remote("http://10.18.225.150:4444/wd/hub", DesiredCapabilities.CHROME) # stack on docker standalone
+    driver = webdriver.Remote("http://selenium:4445/wd/hub", DesiredCapabilities.CHROME) # stack on docker swarm
     return driver
 
 

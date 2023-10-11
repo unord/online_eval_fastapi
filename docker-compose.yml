@@ -1,23 +1,24 @@
 version: '3.7'
-
 services:
   selenium:
     image: selenium/standalone-chrome
     ports:
       - 4445:4444
-    restart: always
+    networks:
+        - online_eval_fastapi
     volumes:
       - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
 
   worker:
-      image: robounord/online_eval_fastapi:v1.00
+      image: robounord/online_eval_fastapi:1.00
       container_name: fastapi
       command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
       networks:
         - public
+        - online_eval_fastapi
       volumes:
         - /home/robo/docker-volumes/eval-files:/app/src/eval_files
-        - /home/robo/docker-volumes/online_eval_fastapi:/app
+        - /home/robo/docker-volumes/online_eval_fastapi/.env:/app/.env
       ports:
           - 8081:8000
       depends_on:
@@ -27,4 +28,6 @@ services:
   networks:
     public:
       external: true
+    online_eval_fastapi:
+      driver: overlay
 
