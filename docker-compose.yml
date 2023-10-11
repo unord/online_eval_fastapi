@@ -8,6 +8,7 @@ services:
     - online_eval_fastapi
     volumes:
     - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
+
   worker:
     image: robounord/online_eval_fastapi:1.02
     container_name: fastapi
@@ -23,6 +24,8 @@ services:
     depends_on:
     - selenium
     restart: always
+
+
 networks:
   public:
     external: true
