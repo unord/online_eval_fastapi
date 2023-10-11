@@ -30,7 +30,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: robounord/unord-web-api:${{ env.NEW_VERSION }}
+        tags: robounord/online_eval_fastapi:${{ env.NEW_VERSION }}  # Change this to your DockerHub username and image name
 
     # Update docker-compose.yml and version.txt (comment docker-compose.yml out if you don't use it)
     - name: Update docker-compose.yml and version.txt
