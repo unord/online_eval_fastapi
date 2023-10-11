@@ -23,8 +23,8 @@ services:
     depends_on:
     - selenium
     restart: always
-  networks:
-    public:
-      external: true
-    online_eval_fastapi:
-      driver: overlay
+networks:
+  public:
+    external: true
+  online_eval_fastapi:
+    driver: overlay
