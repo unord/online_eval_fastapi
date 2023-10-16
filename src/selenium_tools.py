@@ -13,7 +13,12 @@ print(f'Download directory: {download_directory}')
 
 def get_webdriver() -> webdriver:
     time.sleep(3)
-    prefs = {'download.default_directory': download_directory}
+    prefs = {
+        "download.default_directory": download_directory,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing.enabled": True
+    }
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     options.add_argument("--disable-dev-shm-usage")
