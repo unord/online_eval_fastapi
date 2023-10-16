@@ -7,11 +7,10 @@ services:
     - 7900:7900
     networks:
     - online_eval_fastapi
-    #shm_size: 2g
     volumes:
     - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
   worker:
-    image: robounord/online_eval_fastapi:1.10
+    image: robounord/online_eval_fastapi:1.11
     container_name: fastapi
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
