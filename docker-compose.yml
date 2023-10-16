@@ -10,9 +10,9 @@ services:
     volumes:
     - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
     environment:
-      - TZ=Europe/Copenhagen  # set timezone to Copenhagen
+    - TZ=Europe/Copenhagen
   worker:
-    image: robounord/online_eval_fastapi:1.17
+    image: robounord/online_eval_fastapi:1.18
     container_name: fastapi
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
@@ -26,7 +26,7 @@ services:
     depends_on:
     - selenium
     environment:
-      - TZ=Europe/Copenhagen  # set timezone to Copenhagen
+    - TZ=Europe/Copenhagen
 networks:
   public:
     external: true
