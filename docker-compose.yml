@@ -12,7 +12,7 @@ services:
     environment:
     - TZ=Europe/Copenhagen
   worker:
-    image: robounord/online_eval_fastapi:1.18
+    image: robounord/online_eval_fastapi:1.19
     container_name: fastapi
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
