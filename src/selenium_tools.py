@@ -21,7 +21,7 @@ def get_webdriver() -> webdriver:
     options.add_experimental_option('prefs', prefs)
     #driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     #driver = webdriver.Remote("http://10.18.225.150:4444/wd/hub", DesiredCapabilities.CHROME) # stack on docker standalone
-    driver = webdriver.Remote("http://selenium:4445/wd/hub", options=webdriver.ChromeOptions()) # stack on docker swarm
+    driver = webdriver.Remote("http://selenium-online-eval:4445/wd/hub", options=webdriver.ChromeOptions()) # stack on docker swarm
     return driver
 
 
