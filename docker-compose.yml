@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   selenium:
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chrome:118.0
     ports:
     - 4445:4444
     networks:
