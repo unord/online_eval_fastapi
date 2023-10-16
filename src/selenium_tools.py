@@ -7,7 +7,7 @@ import os
 
 #download_directory is eval_files
 #download_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files')
-download_directory = './eval_files'
+download_directory = '/app/src/eval_files'
 print(f'Download directory: {download_directory}')
 
 
