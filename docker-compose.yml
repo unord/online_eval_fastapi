@@ -7,7 +7,7 @@ services:
     - 7900:7900
     networks:
     - online_eval_fastapi
-    shm_size: 2g
+    #shm_size: 2g
     volumes:
     - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
   worker:
