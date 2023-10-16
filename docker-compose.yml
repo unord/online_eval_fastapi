@@ -6,7 +6,7 @@ services:
     - 4445:4444
     - 7900:7900
     networks:
-    - online_eval_fastapi
+    - public
     volumes:
     - /home/robo/docker-volumes/eval-files:/home/seluser/Downloads
   worker:
