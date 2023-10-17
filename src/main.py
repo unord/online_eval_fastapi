@@ -20,7 +20,7 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
 def close_eval_and_send_mail(close_eval_and_send_csv: CloseEvalAndSendCsv) -> dict:
     msg = tools.close_eval_and_send_mail(close_eval_and_send_csv.username,close_eval_and_send_csv.password, close_eval_and_send_csv.refrence, close_eval_and_send_csv.teacher_initials)
     if msg['success']:
-        return {'msg': 'success', 'success': True, 'public_url': msg['public_url']}
+        return {'msg': 'success', 'success': True, 'public_link': msg['public_link']}
     else:
         unord_mail.send_email_with_attachments('ubot@unord.dk', ['gore@unord.dk'], 'Online-Eval-FastApi Error', str(msg), [], [], [])
         return {'msg': 'failed', 'success': False}
