@@ -20,9 +20,9 @@ def get_webdriver() -> webdriver:
         "safebrowsing.enabled": True
     }
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--no-sandbox")
+    #options.add_argument("--no-sandbox")
     options.add_experimental_option('prefs', prefs)
     #driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     #driver = webdriver.Remote("http://10.18.225.150:4444/wd/hub", DesiredCapabilities.CHROME) # stack on docker standalone

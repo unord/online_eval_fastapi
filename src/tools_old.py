@@ -2,9 +2,6 @@ import sys
 from decouple import config
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from urllib.parse import urlparse, parse_qs
@@ -155,7 +152,7 @@ def click_on_element_by_partial_link_text(link_text: str, driver: webdriver) -> 
         return {'msg': f'Element with link text not found. Link text: {link_text}', 'success': False}
 
 
-def close_eval_and_send_mail(username: str, password: str, refrence: str, teacher_initials: str) -> dict:
+def close_eval_and_send_csv(username: str, password: str, refrence: str, teacher_initials: str) -> dict:
 
     #Download directory
     download_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files')
@@ -222,46 +219,68 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
                 return {'msg': f'Analyse not found. Reference: {refrence}', 'success': False}
 
 
-    print('Trying to make evaluation public')
+    print('Finding pdf file')
     try:
-        # Wait for the checkbox to be loaded
-        wait = WebDriverWait(driver, 60)  # wait for up to 60 seconds
-        checkbox = wait.until(EC.presence_of_element_located((By.ID, 'checkbox_resultate_veroeffentlichen')))
-
-        # Check if the checkbox is not checked
-        if not checkbox.is_selected():
-            # Click to check it
-            checkbox.click()
-        print('Evaluation made public')
-    except TimeoutException:
-        print("The checkbox was not loaded within the time limit.")
-
-    print('Trying to get public link')
-    try:
-        # Wait for the checkbox to be loaded
-        wait = WebDriverWait(driver, 60) # wait for up to 60 seconds
+        eval_url= driver.current_url
+    except Exception as e:
+        return {'msg': f'Get url from browser exception. Reference: {refrence}', 'success': False}
 
 
-        # Wait for the link to be loaded
-        link = wait.until(EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, 'https://kontakt.unord.dk/results/')))
+    eval_url_parsed = urlparse(eval_url)
+    eval_uid = parse_qs(eval_url_parsed.query)
+    eval_id = eval_uid.get('uid')[0]
 
-        # Save the link href to a variable
-        public_link = link.get_attribute('href')
-        print(f'Public link: {public_link}')
+    pdf_button_found = False
+    i = 0
+    while not pdf_button_found or i < 50:
+        try:
+            pdf_file = driver.find_element(By.CSS_SELECTOR, 'span.js-pdf-button:nth-child(6) > span:nth-child(1) > a:nth-child(1)')
+            driver.execute_script("arguments[0].click();", pdf_file)
+            print('Pdf file found and downloaded')
+            pdf_button_found = True
+            i = 50
+        except NoSuchElementException:
+            i += 1
+            time.sleep(1)
+            if i == 49:
+                print(f'Could not find pdf button. Current url: {driver.current_url}')
+                return {'msg': f'pdf button not found. Reference: {refrence}', 'success': False}
 
-    except TimeoutException:
-        print("Either the checkbox or the link was not loaded within the time limit.")
+    time.sleep(10)
 
-    print('Send mail to teacher')
+    # Datetime now
+    now = datetime.now()
+    now = now.strftime('%Y-%m-%d-%H-%M')
+    print('Rename pdf file')
+    #list all files in folder eval_files
+    eval_files = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files'))
+    #print(f'eval_files: {eval_files}')
+    #eval_files = os.listdir('./eval_files')
+    send_file_list = []
+    for file in eval_files:
+        if 'output' in file:
+            #rename file to eval_id
+            print(f'file found {file}')
+            try:
+                if search_for_string_in_pdf(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), refrence) == True:
+                    os.rename(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', file), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
+                    send_file_list.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval_files', f'{link_name}-{now}-{eval_id}.pdf'))
+                else:
+                    return {'msg': f'This file belongs to someone else: {refrence}', 'success': False}
+            except FileExistsError as e:
+                return {'msg': f'File already exists. class: {link_name}', 'success': False}
+            except Exception as e:
+                return {'msg': f'Could not rename file. class: {link_name}, Exception: {e}, file: {file}', 'success': False}
+
+    print('Send pdf file')
     #send pdf file to teacher via unord_mail
     subject = f'Eval afsluttet: {link_name}'
     msg = f'Hej {teacher_initials.upper()},\n\n' \
-          f'Undersøgelsen er nu afsluttet. Den kan finde resultatet ved følgende link: {public_link}\n\n' \
-          f'Ved at følge linket kan du udiver at se dine resultater også downloade dem pdf og excel fil.\n\n' \
+          f'Undersøgelsen er nu afsluttet. Den kan finde resultatet vedhæftet fil.\n\n' \
+          f'Hvis der mod forventning ikke er vedhæftet en fil med resultater, så skriv til helpdesk@unord.dk.\n\n' \
           f'Med venlig hilsen\n\n Gorm Reventlow'
 
-    bcc_list =['gorm@reventlow.com', 'gore@unord.dk'] #, 'hefa@unord.dk'
-    send_file_list = []
+    bcc_list =['gorm@reventlow.com', 'gore@unord.dk', 'hefa@unord.dk']
 
     try:
         unord_mail.send_email_with_attachments('ubot@unord.dk', reciver_list, subject, msg, [], bcc_list, send_file_list)
@@ -279,7 +298,7 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
             driver.quit()
             return {'msg': f'Could not send email. class: {link_name}', 'success': False}
     driver.quit()
-    return {'msg': 'success', 'success': True, 'public_link': public_link}
+    return {'msg': 'success', 'success': True}
 
 
 
