@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   selenium-online-eval:
-    image: selenium/standalone-chrome:118.0
+    image: selenium/standalone-chrome:122.0
     ports:
     - 4445:4444
     - 7900:7900
