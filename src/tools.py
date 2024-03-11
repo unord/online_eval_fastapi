@@ -164,14 +164,16 @@ def extract_responses(html_content: str) -> int or None:
 
     for counter in counters:
         if 'Antal deltagere:' in counter.text:
-            # Attempt to extract the number after 'Antal svar:'
             try:
-                responses = int(counter.find('span').text.split(': ')[1])
-                return responses
+                # Split the text based on '|' to isolate 'Antal deltagere' part
+                # Then split by ': ' to get the number, and strip it to clean any leading/trailing spaces
+                participants_text = counter.text.split('|')[0].strip()
+                participants = int(participants_text.split(': ')[1])
+                return participants
             except (ValueError, IndexError):
                 # If there's an error in conversion or splitting, return None
                 return None
-    # If the loop completes without finding 'Antal svar:', return None
+    # If the loop completes without finding 'Antal deltagere:', return None
     return None
 
 def close_eval_and_send_mail(username: str, password: str, refrence: str, teacher_initials: str) -> dict:
