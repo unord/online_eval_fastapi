@@ -19,6 +19,7 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
 @app.post("/close_eval_and_send_mail/")
 def close_eval_and_send_mail(close_eval_and_send_csv: CloseEvalAndSendCsv) -> dict:
     msg = tools.close_eval_and_send_mail(close_eval_and_send_csv.username,close_eval_and_send_csv.password, close_eval_and_send_csv.refrence, close_eval_and_send_csv.teacher_initials)
+    print(f"msg: {msg}")
     if msg['success']:
         return {'msg': 'success', 'success': True, 'public_link': msg['public_link'], 'responses': msg['responses']}
     else:
