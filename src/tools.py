@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from urllib.parse import urlparse, parse_qs
@@ -155,6 +156,24 @@ def click_on_element_by_partial_link_text(link_text: str, driver: webdriver) -> 
         return {'msg': f'Element with link text not found. Link text: {link_text}', 'success': False}
 
 
+def extract_responses(html_content: str) -> int or None:
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # Find all 'td' elements with the class 'counter'
+    counters = soup.find_all('td', class_='counter')
+
+    for counter in counters:
+        if 'Antal svar:' in counter.text:
+            # Attempt to extract the number after 'Antal svar:'
+            try:
+                responses = int(counter.find('span').text.split(': ')[1])
+                return responses
+            except (ValueError, IndexError):
+                # If there's an error in conversion or splitting, return None
+                return None
+    # If the loop completes without finding 'Antal svar:', return None
+    return None
+
 def close_eval_and_send_mail(username: str, password: str, refrence: str, teacher_initials: str) -> dict:
 
     #Download directory
@@ -166,7 +185,7 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
     print(f'login page loaded: {driver.current_url}')
     reciver_list = [teacher_initials + '@unord.dk']
     link_name = ""
-
+    responses = "0"
 
     # Login
     try:
@@ -247,6 +266,7 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
 
         # Save the link href to a variable
         public_link = link.get_attribute('href')
+        responses = extract_responses(driver.page_source)
         print(f'Public link: {public_link}')
 
     except TimeoutException:
@@ -279,7 +299,7 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
             driver.quit()
             return {'msg': f'Could not send email. class: {link_name}', 'success': False}
     driver.quit()
-    return {'msg': 'success', 'success': True, 'public_link': public_link}
+    return {'msg': 'success', 'success': True, 'public_link': public_link, 'responses': responses}
 
 
 
