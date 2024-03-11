@@ -163,7 +163,7 @@ def extract_responses(html_content: str) -> int or None:
     counters = soup.find_all('td', class_='counter')
 
     for counter in counters:
-        if 'Antal svar:' in counter.text:
+        if 'Antal deltagere:' in counter.text:
             # Attempt to extract the number after 'Antal svar:'
             try:
                 responses = int(counter.find('span').text.split(': ')[1])
