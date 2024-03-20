@@ -10,6 +10,8 @@ class CloseEvalAndSendCsv(BaseModel):
     refrence: str
     teacher_initials: str
 
+class TestPayload(BaseModel):
+    test_data: str
 
 @app.get("/close_eval_and_send_mail/{username, password, refrence, teacher_initials}")
 def close_eval_and_send_mail(username: str, password: str, refrence: str, teacher_initials: str) -> dict:
@@ -25,6 +27,13 @@ def close_eval_and_send_mail(close_eval_and_send_csv: CloseEvalAndSendCsv) -> di
     else:
         unord_mail.send_email_with_attachments('ubot@unord.dk', ['gore@unord.dk'], 'Online-Eval-FastApi Error', str(msg), [], [], [])
         return {'msg': 'failed', 'success': False}
+
+
+@app.post("/test_endpoint/")
+def test_endpoint(payload: TestPayload) -> dict:
+    """Echoes back the received payload."""
+    return {"received_data": payload.test_data}
+
 
 def main():
     pass

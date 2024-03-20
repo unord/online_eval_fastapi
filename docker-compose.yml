@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   selenium-online-eval:
-    image: selenium/standalone-chrome:118.0
+    image: selenium/standalone-chrome:122.0
     ports:
     - 4445:4444
     - 7900:7900
@@ -12,7 +12,7 @@ services:
     environment:
     - TZ=Europe/Copenhagen
   worker:
-    image: robounord/online_eval_fastapi:1.24
+    image: robounord/online_eval_fastapi:1.30
     container_name: fastapi
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
