@@ -278,9 +278,9 @@ def close_eval_and_send_mail(username: str, password: str, refrence: str, teache
     msg = f'Hej {teacher_initials.upper()},\n\n' \
           f'Undersøgelsen er nu afsluttet. Den kan finde resultatet ved følgende link: {public_link}\n\n' \
           f'Ved at følge linket kan du udiver at se dine resultater også downloade dem pdf og excel fil.\n\n' \
-          f'Med venlig hilsen\n\n Gorm Reventlow'
+          f'Med venlig hilsen\n\n helpdesk@unord.dk'
 
-    bcc_list =['gorm@reventlow.com', 'gore@unord.dk'] #, 'hefa@unord.dk'
+    bcc_list =['ubot@unord.dk'] #, 'hefa@unord.dk'
     send_file_list = []
 
     try:
